@@ -20,7 +20,6 @@ async function bootstrap() {
     .setDescription('Creates temporary Docker containers for code experiments.')
     .setVersion('0.1.0')
     .setOpenAPIVersion("3.1.0")
-    .addServer('https://sandbox.floow.site')
     .addBearerAuth(
       {
         type: 'http',
@@ -30,10 +29,8 @@ async function bootstrap() {
       'bearer',
     );
 
-  const publicBaseUrl = process.env.PUBLIC_BASE_URL;
-  if (publicBaseUrl) {
-    builder.addServer(publicBaseUrl);
-  }
+  const publicBaseUrl = process.env.PUBLIC_BASE_URL || "http://localhost:6700";
+  builder.addServer(publicBaseUrl);
 
   const config = builder.build();
   const document = SwaggerModule.createDocument(app, config);
