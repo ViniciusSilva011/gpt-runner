@@ -19,6 +19,7 @@ async function bootstrap() {
     .setTitle('GPT Container Experiment API')
     .setDescription('Creates temporary Docker containers for code experiments.')
     .setVersion('0.1.0')
+    .setOpenAPIVersion("3.1.0")
     .addServer('https://sandbox.floow.site')
     .addBearerAuth(
       {
