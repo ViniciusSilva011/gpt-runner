@@ -1,0 +1,69 @@
+# GPT Runner
+
+This project is a Custom GPT-powered code experimentation sandbox
+
+## Production Startup
+
+### 1. Install dependencies
+
+```bash
+npm ci
+```
+
+### 2. Configure environment variables
+
+Copy `.env.example` to `.env` and set at least:
+
+- `ACTION_API_KEY`
+- `MONGO_URI`
+- `MONGO_DB`
+- `MONGO_LOGS_COLLECTION`
+- `RUNNER_IMAGE`
+- `HOST`
+- `PORT`
+
+Example:
+
+```bash
+cp .env.example .env
+```
+
+### 3. Start MongoDB
+
+```bash
+docker compose up -d mongo
+```
+
+### 4. Build the runner image
+
+```bash
+docker build -t gpt-runner:bookworm ./runner
+```
+
+### 5. Build the API
+
+```bash
+npm run build
+```
+
+### 6. Start the API
+
+```bash
+npm start
+```
+
+The API listens on `127.0.0.1:8000` by default. Override that with `HOST` and `PORT` in `.env`.
+
+Swagger UI is available at `http://127.0.0.1:8000/docs`.
+
+Job files and artifacts are stored under the repo-local `./storage/<jobId>/...` directory relative to the process working directory.
+
+# FLOWCHART
+
+```mermaid
+flowchart TD
+    A[Custom GPT Action] --> B[NestJS REST API]
+    B --> C[Temporary Docker container]
+    C --> D[Run commands<br/>Clone repos<br/>Install packages<br/>Test code<br/>Process files]
+    D --> E[Return logs and artifacts to the GPT]
+```
